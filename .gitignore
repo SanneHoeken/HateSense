@@ -1,0 +1,6 @@
+**/*.pyc
+**/*.DS_Store
+__pycache__/*
+output/**/*
+code/play.ipynb
+code/data/1a-inbetween_processing.py

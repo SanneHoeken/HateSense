@@ -1,0 +1,4 @@
+The resulting csv-file of 2-scrape_term_info.py does not have the right examples matched to the right senses. 
+This should be done manually!
+This information ís correctly provided on the Wiktionary website.
+A csv-file with this information correct, can be inputted to 3-post_processing.py

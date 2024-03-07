@@ -2,5 +2,7 @@
 **/*.DS_Store
 __pycache__/*
 output/**/*
+tmp.py
 code/play.ipynb
-code/data/1a-inbetween_processing.py
+code/data-creation/1a-inbetween_processing.py
+code/data-creation/3a-label_encoding.py

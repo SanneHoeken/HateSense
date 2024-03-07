@@ -3,39 +3,40 @@ import pandas as pd
 
 def main(senseinfo_file, group2cat_file=None):
 
-    df = pd.read_csv(senseinfo_file, sep=';')
-    if group2cat_file:
-        group2cat = json.load(group2cat_file)
-    examples = []
-    i = 0
+    df = pd.read_csv(senseinfo_file)
     
-    for row in df.iterrows():
-        row = row[1]
+    if group2cat_file:
+        with open(group2cat_file, 'r') as infile:
+            group2cat = json.load(infile)
+    
+    examples = []
+    n = 0
+    
+    for i, row in df.iterrows():
         if type(row['examples']) == str:
             row_examples = row['examples'].split('\n')
             for ex in row_examples:
-                i += 1
-                ex_entry = {'id': i,
+                n += 1
+                ex_entry = {'id': n,
                             'example': ex,
                             'term': row['term'],
                             'pos': row['pos'],
                             'sense_id': row['sense_id'],
                             'definition': row['definition'],
-                            'categories': row['categories'],
-                            'hate': row['hate']} # TODO: remove after group2cat file is applied
+                            'categories': row['categories']} 
                
                 # GROUP CATEGORY COLUMNS
                 if group2cat_file:
                     cats = []
                     if type(row['categories']) == str:
-                        cats = row['categories'].split(',')
-                    for group_label, group in group2cat:
+                        cats = [c.replace('"', "'") for c in row['categories'].split(', ')]
+                    for group_label, group in group2cat.items():
                         group_cats = []
                         for cat in cats:
                             if cat in group:
                                 group_cats.append(cat)
-                        ex_entry[group_label] = ', '.join(group_cats)
-                
+                        ex_entry[group_label] = ','.join(group_cats) 
+                        
                 examples.append(ex_entry)
     
     new_df = pd.DataFrame(examples)
@@ -44,8 +45,6 @@ def main(senseinfo_file, group2cat_file=None):
 if __name__ == '__main__':
 
     file = '../../data/hateterms-senses.csv'
-    #group2cat_file = '../../data/group2cat.json'
+    group2cat_file = '../../data/group2cat.json'
     
-    main(file)
-
-    """TODO: fix incorrect new lines in resulting file"""
+    main(file, group2cat_file=group2cat_file)

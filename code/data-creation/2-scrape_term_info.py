@@ -50,27 +50,19 @@ def entryinfo_json_to_senseinfo_csv(file):
 
     entries = []
     for term in content:
-        ambiguous = len(content[term].keys()) > 1 # true when multiple pos-tags
         for pos in content[term]:
             i = 0
-            if not ambiguous:
-                ambiguous = len(content[term][pos]) > 1 # true when multiple etymologies
             for entry in content[term][pos]:
                 defs = entry['definitions']
                 cats = entry['categories']
                 examples = entry['examples']
                 for defo, cat in zip(defs, cats):
                     i += 1
-                    if not ambiguous:
-                        ambiguous = len(defs) > 1 # true when multiple definitions
-    
                     entry = {'term': term,
                             'pos': pos,
-                            'ambigous': ambiguous,
                             'sense_id': i,
                             'definition': defo,
                             'categories': ', '.join(cat), 
-                            'n_examples': len(examples),
                             'examples': '\n'.join(examples)}
                     entries.append(entry)
 
